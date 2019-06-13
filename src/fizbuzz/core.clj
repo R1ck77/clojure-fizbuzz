@@ -10,32 +10,36 @@
 (defprotocol Kid
   (utterValue [this]))
 
-(defrecord Fiz []
-    Kid
-  (utterValue [_] fiz))
-
-(defrecord Buzz []
-    Kid
-  (utterValue [_] buzz))
-
-(defrecord FizBuzz []
-    Kid
-    (utterValue [_] fizbuzz))
+(defn- is-multiple? [n m]
+  (zero? (mod n m)))
 
 (defrecord PlainNumber [v]
   Kid
   (utterValue [_] v))
 
-(defn- is-multiple? [n m]
-  (zero? (mod n m)))
+(defrecord Buzz [v]
+  Kid
+  (utterValue [_]
+    (if (is-multiple? v 5)
+      buzz
+      (utterValue (->PlainNumber v)))))
+
+(defrecord Fiz [v]
+  Kid
+  (utterValue [_]
+    (if (is-multiple? v 3)
+      fiz
+      (utterValue (->Buzz v)))))
+
+(defrecord FizBuzz [v]
+  Kid
+  (utterValue [_]
+    (if (is-multiple? v 15)
+      fizbuzz
+      (utterValue (->Fiz v)))))
 
 (defn convert-fizbuzz [n]
-  (utterValue
-   (cond
-     (is-multiple? n 15) (->FizBuzz)
-     (is-multiple? n 3) (->Fiz)
-     (is-multiple? n 5) (->Buzz)
-     :default (->PlainNumber n))))
+  (utterValue (->FizBuzz n)))
 
 (defn fizbuzz-sequence []
   (map convert-fizbuzz (range fizbuzz-min
