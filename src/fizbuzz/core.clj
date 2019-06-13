@@ -26,12 +26,15 @@
   Kid
   (utterValue [_] v))
 
+(defn- is-multiple? [n m]
+  (zero? (mod n m)))
+
 (defn convert-fizbuzz [n]
   (utterValue
    (cond
-     (zero? (mod n 15)) (->FizBuzz)
-     (zero? (mod n 3)) (->Fiz)
-     (zero? (mod n 5)) (->Buzz)
+     (is-multiple? n 15) (->FizBuzz)
+     (is-multiple? n 3) (->Fiz)
+     (is-multiple? n 5) (->Buzz)
      :default (->PlainNumber n))))
 
 (defn fizbuzz-sequence []
