@@ -7,12 +7,32 @@
 (def buzz "buzz")
 (def fizbuzz (str fiz buzz))
 
+(defprotocol Kid
+  (utterValue [this]))
+
+(defrecord Fiz []
+    Kid
+  (utterValue [_] fiz))
+
+(defrecord Buzz []
+    Kid
+  (utterValue [_] buzz))
+
+(defrecord FizBuzz []
+    Kid
+    (utterValue [_] fizbuzz))
+
+(defrecord PlainNumber [v]
+  Kid
+  (utterValue [_] v))
+
 (defn convert-fizbuzz [n]
-  (cond
-    (= 0 (mod n 15)) fizbuzz
-    (= 0 (mod n 3)) fiz
-    (= 0 (mod n 5)) buzz
-    :default n))
+  (utterValue
+   (cond
+     (= 0 (mod n 15)) (->FizBuzz)
+     (= 0 (mod n 3)) (->Fiz)
+     (= 0 (mod n 5)) (->Buzz)
+     :default (->PlainNumber n))))
 
 (defn fizbuzz-sequence []
   (map convert-fizbuzz (range fizbuzz-min
