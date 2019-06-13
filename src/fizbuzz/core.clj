@@ -29,9 +29,9 @@
 (defn convert-fizbuzz [n]
   (utterValue
    (cond
-     (= 0 (mod n 15)) (->FizBuzz)
-     (= 0 (mod n 3)) (->Fiz)
-     (= 0 (mod n 5)) (->Buzz)
+     (zero? (mod n 15)) (->FizBuzz)
+     (zero? (mod n 3)) (->Fiz)
+     (zero? (mod n 5)) (->Buzz)
      :default (->PlainNumber n))))
 
 (defn fizbuzz-sequence []
